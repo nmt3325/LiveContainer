@@ -1,0 +1,58 @@
+name: AWDL - Build IPA
+
+on:
+  push:
+    branches:
+      - 'feat/awdl-**'
+  workflow_dispatch:
+    inputs:
+      extra_bonjour_services:
+        description: 'Extra Bonjour service types, comma or space separated (e.g. "_myapp._tcp,_myapp._udp")'
+        type: string
+        required: false
+
+jobs:
+  build:
+    name: Build IPA with AWDL Bonjour services
+    runs-on: macos-latest
+    env:
+      scheme: LiveContainer
+      archive_path: archive
+    steps:
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '26.2'
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+
+      - name: Inject Bonjour service types
+        env:
+          EXTRA_BONJOUR_SERVICES: ${{ inputs.extra_bonjour_services }}
+        run: sh .github/inject_bonjour_services.sh
+
+      - name: Archive
+        run: |
+          xcodebuild archive \
+            -archivePath "$archive_path" \
+            -scheme "$scheme" \
+            -project LiveContainer.xcodeproj \
+            -sdk iphoneos -arch arm64 -configuration Release \
+            | xcpretty && exit ${PIPESTATUS[0]}
+
+      - name: Create IPA
+        run: sh .github/build_github.sh
+
+      - name: Upload LiveContainer.ipa
+        uses: actions/upload-artifact@v4
+        with:
+          name: LiveContainer-awdl.ipa
+          path: LiveContainer.ipa
+
+      - name: Upload LiveContainer+SideStore.ipa
+        uses: actions/upload-artifact@v4
+        with:
+          name: LiveContainer-SideStore-awdl.ipa
+          path: LiveContainer+SideStore.ipa
