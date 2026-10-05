@@ -82,11 +82,9 @@
 	<string>The guest app is requesting for this permission.</string>
 	<key>NSAlarmKitUsageDescription</key>
 	<string>The guest app is requesting for this permission.</string>
-	<key>NSAppTransportSecurity</key>
+	<!-- On iOS 10+, the presence of NSAllowsLocalNetworking disables NSAllowsArbitraryLoads.\n	     Keep only NSAllowsArbitraryLoads here so arbitrary HTTP hosts/IPs (including VPN/Tailscale) work. -->\n	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
 	<key>NSAppleMusicUsageDescription</key>
