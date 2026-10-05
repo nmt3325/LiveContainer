@@ -29,7 +29,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
         with:
-          submodules: recursive
+          submodules: false
+          persist-credentials: false
+      - name: Checkout public submodules
+        run: |
+          git submodule sync --recursive
+          git submodule update --init --force --depth=1 --recursive
       - name: Set Scheme
         id: scheme
         run: |
