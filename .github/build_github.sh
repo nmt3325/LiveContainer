@@ -41,8 +41,9 @@ mv ./tmp/SideStoreSupport.framework Payload/LiveContainer.app/Frameworks
 
 # download SideStore
 cd tmp
-wget https://github.com/LiveContainer/SideStore/releases/download/nightly/SideStore.ipa
-unzip SideStore.ipa
+wget -O SideStore.ipa https://github.com/SideStore/SideStore/releases/download/nightly/SideStore.ipa || exit 1
+unzip SideStore.ipa || exit 1
+test -d Payload/SideStore.app || { echo "SideStore.app missing from downloaded IPA" >&2; exit 1; }
 cd ..
 
 # SideStore
