@@ -30,7 +30,7 @@
 			<string>MicroGamepad</string>
 		</dict>
 	</array>
-	<!-- On iOS 10+, the presence of NSAllowsLocalNetworking disables NSAllowsArbitraryLoads.\n	     Keep only NSAllowsArbitraryLoads here so arbitrary HTTP hosts/IPs (including VPN/Tailscale) work. -->\n	<key>NSAppTransportSecurity</key>
+	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
